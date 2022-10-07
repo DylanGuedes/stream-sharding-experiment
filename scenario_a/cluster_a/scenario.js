@@ -2,13 +2,6 @@ import {sleep, check} from 'k6';
 import loki from 'k6/x/loki';
 
 /**
- * URL used for push and query requests
- * Path is automatically appended by the client
- * @constant {string}
- */
-const BASE_URL = `http://localhost:3100`;
-
-/**
  * Helper constant for byte values
  * @constant {number}
  */
@@ -20,10 +13,7 @@ const KB = 1024;
  */
 const MB = KB * KB;
 
-/**
- * Instantiate config and Loki client
- */
-const conf = new loki.Config(BASE_URL);
+const conf = new loki.Config(`http://fake@localhost:3101`);
 const client = new loki.Client(conf);
 
 /**
@@ -31,35 +21,35 @@ const client = new loki.Client(conf);
  */
 export const options = {
   scenarios: {
-    a_phase1: {
+    a_cluster_a_p1: {
       executor: 'per-vu-iterations',
       vus: '10',
-      iterations: '20',
+      iterations: '1',
       startTime: '0s',
     },
-    a_phase2: {
+    a_cluster_a_p2: {
       executor: 'per-vu-iterations',
       vus: '10',
-      iterations: '20',
+      iterations: '1',
+      startTime: '20s',
+    },
+    a_cluster_a_p3: {
+      executor: 'per-vu-iterations',
+      vus: '10',
+      iterations: '1',
+      startTime: '40s',
+    },
+    a_cluster_a_p4: {
+      executor: 'per-vu-iterations',
+      vus: '10',
+      iterations: '1',
       startTime: '1m',
     },
-    a_phase3: {
+    a_cluster_a_p5: {
       executor: 'per-vu-iterations',
       vus: '10',
-      iterations: '20',
-      startTime: '2m',
-    },
-    a_phase4: {
-      executor: 'per-vu-iterations',
-      vus: '10',
-      iterations: '20',
-      startTime: '3m',
-    },
-    a_phase5: {
-      executor: 'per-vu-iterations',
-      vus: '10',
-      iterations: '20',
-      startTime: '4m',
+      iterations: '1',
+      startTime: '1m20s',
     },
   },
 };

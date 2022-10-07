@@ -6,6 +6,7 @@ server:
   http_listen_port: 3100
   grpc_listen_port: 9095
   log_level: info
+  grpc_server_max_recv_msg_size: 94194304
 
 common:
   storage:
@@ -16,14 +17,14 @@ common:
       access_key_id: loki
       secret_access_key: supersecret
       s3forcepathstyle: true
-  compactor_address: http://loki-write:3100
-  kvstore:
-    ring:
+  ring:
+    kvstore:
       store: memberlist
   replication_factor: 1
+  path_prefix: /loki
 
 memberlist:
-  join_members: ["loki-ingester", "loki-distributor"]
+  join_members: ["ingester", "distributor"]
   dead_node_reclaim_time: 30s
   gossip_to_dead_nodes_time: 15s
   left_ingesters_timeout: 30s

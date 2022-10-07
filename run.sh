@@ -11,6 +11,14 @@ usage() {
   echo "- <scenario>:   K6 Loki test scenario definition (js file)."
 }
 
+readiness-check() {
+  while [[ "$(curl -s -o /dev/null -m 3 -L -w ''%{http_code}'' ${1})" != "200" ]];\
+  do
+    log "Waiting for ${1}" && sleep 2;\
+  done
+  log "${1} passed readiness check"
+}
+
 # Parse CLI args.
 if [ $# -ne 1 ]; then
   usage
@@ -28,7 +36,18 @@ if [ "$REPLY" != "y" ]; then
   exit 1
 fi
 
-log "Running scenario '$SCENARIO'"
-k6 run $SCENARIO
+log "Running experiment for scenario '$SCENARIO'"
 
-log "Finished running scenario '$SCENARIO'. Results are available under 'report.json'"
+### Boot cluster A
+cd ./scenario_a/cluster_a
+docker-compose up -d
+cd ../../
+readiness-check http://localhost:3101/ready
+log "cluster A is ready, starting experiment"
+
+### Run experiment against cluster A
+K6_PROMETHEUS_REMOTE_URL=http://localhost:9090/api/v1/write \
+k6 run $SCENARIO/cluster_a/scenario.js \
+-o output-prometheus-remote
+
+log "Finished running scenario '$SCENARIO'"

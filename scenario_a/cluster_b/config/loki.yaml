@@ -1,0 +1,55 @@
+auth_enabled: true
+
+http_prefix:
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9095
+  log_level: info
+  grpc_server_max_recv_msg_size: 94194304
+
+common:
+  storage:
+    s3:
+      endpoint: minio:9000
+      insecure: true
+      bucketnames: loki-data
+      access_key_id: loki
+      secret_access_key: supersecret
+      s3forcepathstyle: true
+  ring:
+    kvstore:
+      store: memberlist
+  replication_factor: 1
+  path_prefix: /loki
+
+memberlist:
+  join_members: ["ingester", "distributor"]
+  dead_node_reclaim_time: 30s
+  gossip_to_dead_nodes_time: 15s
+  left_ingesters_timeout: 30s
+  bind_addr: ['0.0.0.0']
+  bind_port: 7946
+  gossip_interval: 2s
+
+ingester:
+  chunk_idle_period: 1m
+  wal:
+    enabled: true
+    dir: /loki/wal
+  max_chunk_age: 1m
+  chunk_retain_period: 30s
+  chunk_encoding: snappy
+  chunk_target_size: 1.572864e+06
+  chunk_block_size: 262144
+  flush_op_timeout: 10s
+
+schema_config:
+  configs:
+  - from: 2020-08-01
+    store: boltdb-shipper
+    object_store: s3
+    schema: v11
+    index:
+      prefix: index_
+      period: 24h
