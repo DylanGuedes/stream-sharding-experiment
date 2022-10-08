@@ -49,5 +49,12 @@ log "cluster A is ready, starting experiment"
 K6_PROMETHEUS_REMOTE_URL=http://localhost:9090/api/v1/write \
 k6 run $SCENARIO/cluster_a/scenario.js \
 -o output-prometheus-remote
+log "Finished running experiment against cluster A"
+log "Sleeping for 30s to scrape final metrics"
+sleep 30
+log "Stopping cluster A"
+cd ./scenario_a/cluster_a
+docker-compose stop
+cd ../../
 
 log "Finished running scenario '$SCENARIO'"

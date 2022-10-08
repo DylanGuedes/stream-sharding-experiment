@@ -36,7 +36,7 @@ services:
       - loki
 
   querier:
-    image: grafana/loki:2.6.1
+    image: grafana/loki:main-8331785
     command: "-config.file=/etc/loki/loki.yaml -target=querier"
     networks:
       - loki
@@ -44,7 +44,7 @@ services:
       - ./config:/etc/loki/
 
   ingester:
-    image: grafana/loki:2.6.1
+    image: grafana/loki:main-8331785
     command: "-config.file=/etc/loki/loki.yaml -target=ingester"
     networks:
       - loki
@@ -59,7 +59,7 @@ services:
       - ./config:/etc/loki/
 
   distributor:
-    command: "-config.file=/etc/loki/loki.yaml -target=distributor"
+    image: grafana/loki:main-8331785
     networks:
       - loki
     image: grafana/loki:2.6.1

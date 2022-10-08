@@ -2,6 +2,8 @@ version: "3.8"
 
 networks:
   loki:
+    name: loki
+    external: true
 
 services:
   loki-gateway:
@@ -36,15 +38,18 @@ services:
       - loki
 
   querier:
-    image: grafana/loki:2.6.1
+    image: grafana/loki:main-8331785
     command: "-config.file=/etc/loki/loki.yaml -target=querier"
     networks:
       - loki
+    ports:
+      - "3100"
+      - "7946"
     volumes:
       - ./config:/etc/loki/
 
   ingester:
-    image: grafana/loki:2.6.1
+    image: grafana/loki:main-8331785
     command: "-config.file=/etc/loki/loki.yaml -target=ingester"
     networks:
       - loki
@@ -62,7 +67,7 @@ services:
     command: "-config.file=/etc/loki/loki.yaml -target=distributor"
     networks:
       - loki
-    image: grafana/loki:2.6.1
+    image: grafana/loki:main-8331785
     volumes:
       - ./config:/etc/loki/
     ports:
@@ -71,6 +76,17 @@ services:
     deploy:
       mode: replicated
       replicas: 3
+
+  prometheus:
+    image: prom/prometheus:v2.27.0
+    ports:
+      - "9090"
+    volumes:
+      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+    command: [ '--log.level=debug', '--config.file=/etc/prometheus/prometheus.yml', '--query.lookback-delta=30s', '--enable-feature=remote-write-receiver', '--web.enable-lifecycle']
+    networks:
+      - loki
 
 volumes:
   prometheus:

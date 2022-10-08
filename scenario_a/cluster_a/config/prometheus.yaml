@@ -1,0 +1,24 @@
+global:
+  scrape_interval:     15s
+
+scrape_configs:
+- job_name: 'loki-cluster-a'
+  dns_sd_configs:
+  - names:
+    - cluster_a-ingester-1
+    - cluster_a-ingester-2
+    - cluster_a-ingester-3
+    - cluster_a-ingester-4
+    - cluster_a-ingester-5
+    - cluster_a-ingester-6
+    type: A
+    port: 3100
+  static_configs:
+    - labels:
+        cluster: a
+
+- job_name: 'prom'
+  scrape_interval: 15s
+  static_configs:
+  - targets:
+    - 'prometheus:9090'

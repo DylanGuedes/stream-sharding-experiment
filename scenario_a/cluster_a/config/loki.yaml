@@ -7,8 +7,11 @@ server:
   grpc_listen_port: 9095
   log_level: info
   grpc_server_max_recv_msg_size: 94194304
+  http_listen_address: 0.0.0.0
+  grpc_listen_address: 0.0.0.0
 
 common:
+  compactor_address: ingester:3100
   storage:
     s3:
       endpoint: minio:9000
