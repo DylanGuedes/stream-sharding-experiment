@@ -1,0 +1,24 @@
+global:
+  scrape_interval:     15s
+
+scrape_configs:
+- job_name: 'loki-cluster-b'
+  static_configs:
+    - labels:
+        cluster: b
+    - targets:
+      - cluster_b_ingester_6:3100
+      - cluster_b_ingester_5:3100
+      - cluster_b_ingester_4:3100
+      - cluster_b_ingester_3:3100
+      - cluster_b_ingester_2:3100
+      - cluster_b_ingester_1:3100
+      - cluster_b_distributor_1:3100
+      - cluster_b_distributor_2:3100
+      - cluster_b_distributor_3:3100
+
+- job_name: 'prom'
+  scrape_interval: 15s
+  static_configs:
+  - targets:
+    - 'prometheus:9090'

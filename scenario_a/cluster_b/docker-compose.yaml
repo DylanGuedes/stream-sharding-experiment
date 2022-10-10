@@ -2,6 +2,8 @@ version: "3.8"
 
 networks:
   loki:
+    name: loki
+    external: true
 
 services:
   loki-gateway:
@@ -10,7 +12,7 @@ services:
       - ./config/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "8080:80"
-      - "3102:3100"
+      - "3101:3100"
     networks:
       - loki
 
@@ -36,15 +38,18 @@ services:
       - loki
 
   querier:
-    image: grafana/loki:main-8331785
+    image: grafana/loki:tpatterson-rate-store-f3dfbb0-WIP
     command: "-config.file=/etc/loki/loki.yaml -target=querier"
     networks:
       - loki
+    ports:
+      - "3100"
+      - "7946"
     volumes:
       - ./config:/etc/loki/
 
   ingester:
-    image: grafana/loki:main-8331785
+    image: grafana/loki:tpatterson-rate-store-f3dfbb0-WIP
     command: "-config.file=/etc/loki/loki.yaml -target=ingester"
     networks:
       - loki
@@ -59,10 +64,10 @@ services:
       - ./config:/etc/loki/
 
   distributor:
-    image: grafana/loki:main-8331785
+    command: "-config.file=/etc/loki/loki.yaml -target=distributor"
     networks:
       - loki
-    image: grafana/loki:2.6.1
+    image: grafana/loki:tpatterson-rate-store-f3dfbb0-WIP
     volumes:
       - ./config:/etc/loki/
     ports:
@@ -71,6 +76,17 @@ services:
     deploy:
       mode: replicated
       replicas: 3
+
+  prometheus:
+    image: prom/prometheus:v2.27.0
+    ports:
+      - "3999:9090"
+    volumes:
+      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+    command: [ '--log.level=debug', '--config.file=/etc/prometheus/prometheus.yml', '--query.lookback-delta=30s', '--enable-feature=remote-write-receiver', '--web.enable-lifecycle']
+    networks:
+      - loki
 
 volumes:
   prometheus:

@@ -38,7 +38,9 @@ fi
 
 log "Running experiment for scenario '$SCENARIO'"
 
-### Boot cluster A
+################################################################################
+  CLUSTER A
+## Boot cluster A
 cd ./scenario_a/cluster_a
 docker-compose up -d
 cd ../../
@@ -56,5 +58,28 @@ log "Stopping cluster A"
 cd ./scenario_a/cluster_a
 docker-compose stop
 cd ../../
+###############################################################################
+
+###############################################################################
+#   CLUSTER B
+### Boot cluster B
+cd ./scenario_a/cluster_b
+docker-compose up -d
+cd ../../
+readiness-check http://localhost:3101/ready
+log "cluster B is ready, starting experiment"
+
+### Run experiment against cluster A
+K6_PROMETHEUS_REMOTE_URL=http://localhost:9090/api/v1/write \
+k6 run $SCENARIO/cluster_b/scenario.js \
+-o output-prometheus-remote
+log "Finished running experiment against cluster B"
+log "Sleeping for 30s to scrape final metrics"
+sleep 30
+log "Stopping cluster B"
+cd ./$SCENARIO/cluster_b
+docker-compose stop
+cd ../../
+###############################################################################
 
 log "Finished running scenario '$SCENARIO'"

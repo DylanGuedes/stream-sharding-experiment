@@ -80,7 +80,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.27.0
     ports:
-      - "9090"
+      - "3999:9090"
     volumes:
       - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml
       - prometheus:/prometheus

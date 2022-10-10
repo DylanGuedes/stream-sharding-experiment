@@ -11,7 +11,29 @@ scrape_configs:
       - '{job="loki-cluster-a"}'
   static_configs:
   - targets:
-    - 'cluster_a-prometheus-1:9090'
+    - 'cluster_a_prometheus_1:9090'
+
+- job_name: 'federate-cluster-b'
+  scrape_interval: 15s
+  honor_labels: true
+  metrics_path: '/federate'
+  params:
+    'match[]':
+      - '{job="loki-cluster-b"}'
+  static_configs:
+  - targets:
+    - 'cluster_b_prometheus_1:9090'
+
+- job_name: 'federate-cluster-c'
+  scrape_interval: 15s
+  honor_labels: true
+  metrics_path: '/federate'
+  params:
+    'match[]':
+      - '{job="loki-cluster-c"}'
+  static_configs:
+  - targets:
+    - 'cluster_c_prometheus_1:9090'
 
 - job_name: cadvisor
   scrape_interval: 15s

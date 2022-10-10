@@ -13,7 +13,14 @@ const KB = 1024;
  */
 const MB = KB * KB;
 
-const conf = new loki.Config(`http://fake@localhost:3101`);
+const labels = loki.Labels({
+  "format": ["logfmt"], // must contain at least one of the supported log formats
+  "namespace": ["loki-prod"],
+  "container": ["distributor"],
+  "instance": ["localhost"], // overrides the `instance` label which is otherwise derived from the hostname and VU
+});
+
+const conf = new loki.Config(`http://fake@localhost:3101`, 10000, 1.0, {}, labels);
 const client = new loki.Client(conf);
 
 /**
@@ -23,31 +30,31 @@ export const options = {
   scenarios: {
     a_cluster_b_p1: {
       executor: 'per-vu-iterations',
-      vus: '10',
-      iterations: '1',
+      vus: '5',
+      iterations: '10',
       startTime: '0s',
     },
     a_cluster_b_p2: {
       executor: 'per-vu-iterations',
-      vus: '10',
-      iterations: '1',
+      vus: '5',
+      iterations: '10',
       startTime: '20s',
     },
     a_cluster_b_p3: {
       executor: 'per-vu-iterations',
-      vus: '10',
-      iterations: '1',
+      vus: '5',
+      iterations: '10',
       startTime: '40s',
     },
     a_cluster_b_p4: {
       executor: 'per-vu-iterations',
-      vus: '10',
-      iterations: '1',
+      vus: '5',
+      iterations: '20',
       startTime: '1m',
     },
     a_cluster_b_p5: {
       executor: 'per-vu-iterations',
-      vus: '10',
+      vus: '5',
       iterations: '1',
       startTime: '1m20s',
     },
