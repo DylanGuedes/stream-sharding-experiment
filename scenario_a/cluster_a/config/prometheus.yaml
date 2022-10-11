@@ -6,16 +6,14 @@ scrape_configs:
   static_configs:
     - labels:
         cluster: a
-    - targets:
-      - cluster_a-ingester-6:3100
-      - cluster_a-ingester-5:3100
-      - cluster_a-ingester-4:3100
-      - cluster_a-ingester-3:3100
-      - cluster_a-ingester-2:3100
-      - cluster_a-ingester-1:3100
-      - cluster_a-distributor-1:3100
-      - cluster_a-distributor-2:3100
-      - cluster_a-distributor-3:3100
+  dns_sd_configs:
+    - names:
+        - ingester
+        - distributor
+        - querier
+      type: A
+      port: 3100
+      refresh_interval: "15s"
 
 - job_name: 'prom'
   scrape_interval: 15s

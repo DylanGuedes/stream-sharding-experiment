@@ -31,6 +31,7 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
+    privileged: true
     networks:
       - loki
     container_name: cadvisor

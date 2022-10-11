@@ -69,7 +69,4 @@ export default () => {
   var res = client.pushParameterized(1, 100 * KB, 5 * MB);
   // Check for successful write
   check(res, { 'successful write': (res) => res.status == 204 });
-
-  // Wait before next iteration
-  sleep(1);
 }

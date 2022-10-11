@@ -35,6 +35,18 @@ scrape_configs:
   - targets:
     - 'cluster_c_prometheus_1:9090'
 
+- job_name: 'federate-cluster-d'
+  scrape_interval: 15s
+  honor_labels: true
+  metrics_path: '/federate'
+  params:
+    'match[]':
+      - '{job="loki-cluster-d"}'
+  static_configs:
+  - targets:
+    - 'cluster_d_prometheus_1:9090'
+
+
 - job_name: cadvisor
   scrape_interval: 15s
   static_configs:

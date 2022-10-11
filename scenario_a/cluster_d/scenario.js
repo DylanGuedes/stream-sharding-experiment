@@ -28,31 +28,31 @@ const client = new loki.Client(conf);
  */
 export const options = {
   scenarios: {
-    a_cluster_a_p1: {
+    a_cluster_d_p1: {
       executor: 'per-vu-iterations',
       vus: '5',
       iterations: '10',
       startTime: '0s',
     },
-    a_cluster_a_p2: {
+    a_cluster_d_p2: {
       executor: 'per-vu-iterations',
       vus: '5',
       iterations: '10',
       startTime: '20s',
     },
-    a_cluster_a_p3: {
+    a_cluster_d_p3: {
       executor: 'per-vu-iterations',
       vus: '5',
       iterations: '10',
       startTime: '40s',
     },
-    a_cluster_a_p4: {
+    a_cluster_d_p4: {
       executor: 'per-vu-iterations',
       vus: '5',
       iterations: '20',
       startTime: '1m',
     },
-    a_cluster_a_p5: {
+    a_cluster_d_p5: {
       executor: 'per-vu-iterations',
       vus: '5',
       iterations: '1',

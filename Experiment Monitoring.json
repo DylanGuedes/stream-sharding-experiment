@@ -118,18 +118,6 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "k6_http_req_duration_p95",
-          "hide": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Latency",
@@ -219,7 +207,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(loki_distributor_bytes_received_total{tenant=\"fake\",instance=~\"cluster_${cluster}.*\"}[5m])) by (instance)",
+          "expr": "sum(rate(loki_distributor_bytes_received_total{tenant=\"fake\",job=\"loki-cluster-${cluster}\"}[5m])) by (instance)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -312,23 +300,11 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "loki_rate_store{}",
+          "expr": "loki_rate_store_max_stream_shard_count{job=\"loki-cluster-${cluster}\"}",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "loki_rate_store_stream_count",
-          "hide": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Number of shards",
@@ -418,7 +394,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (status,instance) (\nlabel_replace(\n  label_replace(\n          rate(loki_request_duration_seconds_count{instance=~\"cluster_$cluster.*\", route=~\"api_prom_push|loki_api_v1_push\"}[5m]),\n   \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n\"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))",
+          "expr": "sum by (status,instance) (\nlabel_replace(\n  label_replace(\n          rate(loki_request_duration_seconds_count{job=\"loki-cluster-${cluster}\",route=~\"api_prom_push|loki_api_v1_push\"}[5m]),\n   \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n\"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -511,22 +487,10 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(loki_distributor_lines_received_total{instance=~\"cluster_${cluster}.*\"}[5m])) by (instance)",
+          "expr": "sum(rate(loki_distributor_lines_received_total{job=\"loki-cluster-${cluster}\"}[5m])) by (instance)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "loki_distributor_lines_received_total",
-          "hide": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "K6 # Lines",
@@ -723,22 +687,10 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(container_memory_usage_bytes{container_label_com_docker_compose_project=~\"cluster_${cluster}.*\",name=~\"cluster_${cluster}-ingester.*\",image=~\"grafana/loki.*\"}) by(name)",
+          "expr": "sum(container_memory_usage_bytes{container_label_com_docker_compose_project=~\"cluster_${cluster}.*\",name=~\"cluster_${cluster}_ingester.*\",image=~\"grafana/loki.*\"}) by(name)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "container",
-          "hide": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "Ingester Memory Usage (bytes)",
@@ -828,7 +780,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"cluster_$cluster\",name=~\"cluster_${cluster}-distributor.*\",image=~\"grafana/loki.*\"}[$__rate_interval]))by(name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"cluster_$cluster\",name=~\"cluster_${cluster}_distributor.*\",image=~\"grafana/loki.*\"}[$__rate_interval]))by(name)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -921,7 +873,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"cluster_$cluster\",name=~\"cluster_${cluster}-ingester.*\",image=~\"grafana/loki.*\"}[$__rate_interval]))by(name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"cluster_$cluster\",name=~\"cluster_${cluster}_ingester.*\",image=~\"grafana/loki.*\"}[$__rate_interval]))by(name)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -931,7 +883,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "schemaVersion": 37,
   "style": "dark",
   "tags": [],
@@ -940,8 +892,8 @@
       {
         "current": {
           "selected": true,
-          "text": "a",
-          "value": "a"
+          "text": "b",
+          "value": "b"
         },
         "hide": 0,
         "includeAll": false,
@@ -950,12 +902,12 @@
         "name": "cluster",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "a",
             "value": "a"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "b",
             "value": "b"
           },
@@ -1000,13 +952,13 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Experiment Monitoring",
   "uid": "yA5uQ344k",
-  "version": 16,
+  "version": 14,
   "weekStart": ""
 }

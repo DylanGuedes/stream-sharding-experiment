@@ -2,10 +2,10 @@ global:
   scrape_interval:     15s
 
 scrape_configs:
-- job_name: 'loki-cluster-c'
+- job_name: 'loki-cluster-d'
   static_configs:
     - labels:
-        cluster: c
+        cluster: d
   dns_sd_configs:
     - names:
         - ingester
