@@ -7,15 +7,15 @@ scrape_configs:
     - labels:
         cluster: a
     - targets:
-      - cluster_a_ingester_6:3100
-      - cluster_a_ingester_5:3100
-      - cluster_a_ingester_4:3100
-      - cluster_a_ingester_3:3100
-      - cluster_a_ingester_2:3100
-      - cluster_a_ingester_1:3100
-      - cluster_a_distributor_1:3100
-      - cluster_a_distributor_2:3100
-      - cluster_a_distributor_3:3100
+      - cluster_a-ingester-6:3100
+      - cluster_a-ingester-5:3100
+      - cluster_a-ingester-4:3100
+      - cluster_a-ingester-3:3100
+      - cluster_a-ingester-2:3100
+      - cluster_a-ingester-1:3100
+      - cluster_a-distributor-1:3100
+      - cluster_a-distributor-2:3100
+      - cluster_a-distributor-3:3100
 
 - job_name: 'prom'
   scrape_interval: 15s

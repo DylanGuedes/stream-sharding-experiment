@@ -15,6 +15,10 @@ services:
       - "3101:3100"
     networks:
       - loki
+    depends_on:
+      - ingester
+      - distributor
+      - querier
 
   minio:
     image: minio/minio

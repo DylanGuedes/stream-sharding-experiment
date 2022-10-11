@@ -114,10 +114,22 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(k6_http_req_duration_p95{scenario=~\"$scenario.*\"})by(scenario)",
+          "expr": "sum(k6_http_req_duration_p95{scenario=~\"${scenario}_cluster_${cluster}.*\"})by(scenario)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "k6_http_req_duration_p95",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Latency",
@@ -300,7 +312,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "loki_rate_store_max_stream_shard_count{}",
+          "expr": "loki_rate_store{}",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -503,6 +515,18 @@
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "loki_distributor_lines_received_total",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "K6 # Lines",
@@ -593,7 +617,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(k6_http_req_failed{}) by(scenario, status)",
+          "expr": "sum(k6_http_req_failed{scenario=~\"${scenario}_cluster_${cluster}.*\"}) by(scenario, status)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -699,10 +723,22 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(container_memory_usage_bytes{container_label_com_docker_compose_project=\"cluster_${cluster}\",name=~\"cluster_${cluster}_ingester.*\",image=~\"grafana/loki.*\"}) by(name)",
+          "expr": "sum(container_memory_usage_bytes{container_label_com_docker_compose_project=~\"cluster_${cluster}.*\",name=~\"cluster_${cluster}-ingester.*\",image=~\"grafana/loki.*\"}) by(name)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "container",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Ingester Memory Usage (bytes)",
@@ -792,7 +828,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"cluster_$cluster\",name=~\"cluster_${cluster}_distributor.*\",image=~\"grafana/loki.*\"}[$__rate_interval]))by(name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"cluster_$cluster\",name=~\"cluster_${cluster}-distributor.*\",image=~\"grafana/loki.*\"}[$__rate_interval]))by(name)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -885,13 +921,13 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"cluster_$cluster\",name=~\"cluster_${cluster}_ingester.*\",image=~\"grafana/loki.*\"}[$__rate_interval]))by(name)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"cluster_$cluster\",name=~\"cluster_${cluster}-ingester.*\",image=~\"grafana/loki.*\"}[$__rate_interval]))by(name)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Distributor CPU Usage",
+      "title": "Ingesters CPU Usage",
       "type": "timeseries"
     }
   ],
@@ -904,8 +940,8 @@
       {
         "current": {
           "selected": true,
-          "text": "b",
-          "value": "b"
+          "text": "a",
+          "value": "a"
         },
         "hide": 0,
         "includeAll": false,
@@ -914,12 +950,12 @@
         "name": "cluster",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "a",
             "value": "a"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "b",
             "value": "b"
           },
@@ -971,6 +1007,6 @@
   "timezone": "",
   "title": "Experiment Monitoring",
   "uid": "yA5uQ344k",
-  "version": 10,
+  "version": 16,
   "weekStart": ""
 }

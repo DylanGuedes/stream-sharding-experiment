@@ -15,6 +15,10 @@ services:
       - "3101:3100"
     networks:
       - loki
+    depends_on:
+      - ingester
+      - distributor
+      - querier
 
   minio:
     image: minio/minio
@@ -80,7 +84,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.27.0
     ports:
-      - "3999:9090"
+      - "3997:9090"
     volumes:
       - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml
       - prometheus:/prometheus

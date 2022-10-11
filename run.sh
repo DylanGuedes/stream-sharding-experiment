@@ -93,7 +93,7 @@ log "cluster B is ready, starting experiment"
 
 ### Run experiment against cluster C
 K6_PROMETHEUS_REMOTE_URL=http://localhost:9090/api/v1/write \
-k6 run $SCENARIO/cluster_b/scenario.js \
+k6 run $SCENARIO/cluster_c/scenario.js \
 -o output-prometheus-remote
 log "Finished running experiment against cluster C"
 log "Sleeping for 30s to scrape final metrics"
