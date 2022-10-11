@@ -41,7 +41,7 @@ log "Running experiment for scenario '$SCENARIO'"
 ################################################################################
   CLUSTER A
 ## Boot cluster A
-cd ./scenario_a/cluster_a
+cd ./$SCENARIO/cluster_a
 docker-compose up -d
 cd ../../
 readiness-check http://localhost:3101/ready
@@ -55,7 +55,7 @@ log "Finished running experiment against cluster A"
 log "Sleeping for 30s to scrape final metrics"
 sleep 30
 log "Stopping cluster A"
-cd ./scenario_a/cluster_a
+cd ./$SCENARIO/cluster_a
 docker-compose stop
 cd ../../
 ###############################################################################
@@ -63,13 +63,13 @@ cd ../../
 ###############################################################################
 #   CLUSTER B
 ### Boot cluster B
-cd ./scenario_a/cluster_b
+cd ./$SCENARIO/cluster_b
 docker-compose up -d
 cd ../../
 readiness-check http://localhost:3101/ready
 log "cluster B is ready, starting experiment"
 
-### Run experiment against cluster A
+### Run experiment against cluster B
 K6_PROMETHEUS_REMOTE_URL=http://localhost:9090/api/v1/write \
 k6 run $SCENARIO/cluster_b/scenario.js \
 -o output-prometheus-remote
@@ -78,6 +78,28 @@ log "Sleeping for 30s to scrape final metrics"
 sleep 30
 log "Stopping cluster B"
 cd ./$SCENARIO/cluster_b
+docker-compose stop
+cd ../../
+###############################################################################
+
+###############################################################################
+#   CLUSTER C
+### Boot cluster C
+cd ./$SCENARIO/cluster_c
+docker-compose up -d
+cd ../../
+readiness-check http://localhost:3101/ready
+log "cluster B is ready, starting experiment"
+
+### Run experiment against cluster C
+K6_PROMETHEUS_REMOTE_URL=http://localhost:9090/api/v1/write \
+k6 run $SCENARIO/cluster_b/scenario.js \
+-o output-prometheus-remote
+log "Finished running experiment against cluster C"
+log "Sleeping for 30s to scrape final metrics"
+sleep 30
+log "Stopping cluster C"
+cd ./$SCENARIO/cluster_c
 docker-compose stop
 cd ../../
 ###############################################################################
