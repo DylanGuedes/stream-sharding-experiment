@@ -2,20 +2,20 @@ global:
   scrape_interval:     15s
 
 scrape_configs:
-- job_name: 'loki-cluster-a'
+- job_name: 'loki-cluster-c'
   static_configs:
     - labels:
-        cluster: a
+        cluster: c
     - targets:
-      - cluster_a_ingester_6:3100
-      - cluster_a_ingester_5:3100
-      - cluster_a_ingester_4:3100
-      - cluster_a_ingester_3:3100
-      - cluster_a_ingester_2:3100
-      - cluster_a_ingester_1:3100
-      - cluster_a_distributor_1:3100
-      - cluster_a_distributor_2:3100
-      - cluster_a_distributor_3:3100
+      - cluster_c_ingester_6:3100
+      - cluster_c_ingester_5:3100
+      - cluster_c_ingester_4:3100
+      - cluster_c_ingester_3:3100
+      - cluster_c_ingester_2:3100
+      - cluster_c_ingester_1:3100
+      - cluster_c_distributor_1:3100
+      - cluster_c_distributor_2:3100
+      - cluster_c_distributor_3:3100
 
 - job_name: 'prom'
   scrape_interval: 15s
